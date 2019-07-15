@@ -1,0 +1,34 @@
+service: serverless-plugin-warmup-1 # NOTE: update this with your service name
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  region: us-west-2
+  stage: prod
+  role: arn:aws:iam::830562272362:role/svc_hmt_lambda_npe  # must validly reference a role defined in your account
+
+custom:
+  warmup:
+      enabled: true # Whether to warm up functions by default or not
+      tags:
+        Project: Thimma Reddy
+        Owner: TR
+      vpc: false
+      timeout: 20
+      prewarm: true # Run WarmUp immediately after a deploymentlambda
+      concurrency: 5
+
+plugins:
+  - serverless-plugin-warmup
+
+functions:
+  l1:
+    handler: handler.hello
+    description: optional description for your Lambda
+    warmup : true
+    events:
+      - schedule: rate(3 minutes)
+  l2:
+    handler: handler.hello
+    description: optional description for your Lambda
+    warmup : true
